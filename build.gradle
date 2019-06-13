@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group 'com.ssy'
+version '1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven {
+        name "aliyunmaven"
+        url "http://maven.aliyun.com/nexus/content/groups/public/"
+    }
+    mavenCentral()
+}
+
+dependencies {
+    testCompile (
+            "junit:junit:4.12"
+    )
+    compile (
+            "io.netty:netty-all:4.1.36.Final",
+            "com.google.protobuf:protobuf-java:3.8.0",
+            "com.google.protobuf:protobuf-java-util:3.8.0"
+    )
+}
