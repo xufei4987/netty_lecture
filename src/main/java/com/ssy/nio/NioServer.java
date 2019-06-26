@@ -26,8 +26,6 @@ public class NioServer {
 
         while (true){
             int select = selector.select();
-            System.out.println("select: "+ select);
-
             Set<SelectionKey> selectionKeys = selector.selectedKeys();
             Iterator<SelectionKey> iterator = selectionKeys.iterator();
             while(iterator.hasNext()) {
