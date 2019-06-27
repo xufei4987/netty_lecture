@@ -13,8 +13,9 @@ import java.nio.channels.SocketChannel;
 public class NewIoClient {
     public static void main(String[] args) throws Exception{
         SocketChannel socketChannel = SocketChannel.open();
+        socketChannel.connect(new InetSocketAddress("127.0.0.1",8899));
         socketChannel.configureBlocking(true);
-        socketChannel.connect(new InetSocketAddress("localhost",8899));
+
 
         String fileName = "E:\\9-PRS7012\\01_PRS7012Web.7z";
 
@@ -22,12 +23,17 @@ public class NewIoClient {
 
         long startTime = System.currentTimeMillis();
 
-        long total = fileChannel.transferTo(0, fileChannel.size(), socketChannel);
+        System.out.println(fileChannel.size());
+
+        long total =0;
+        while (total < fileChannel.size()){
+            total += fileChannel.transferTo(total, fileChannel.size(), socketChannel);
+        }
 
         long endTime = System.currentTimeMillis();
 
-        fileChannel.close();
-
         System.out.println("发送总字节数："+total+",总耗时："+(endTime-startTime)+"ms");
+
+        fileChannel.close();
     }
 }

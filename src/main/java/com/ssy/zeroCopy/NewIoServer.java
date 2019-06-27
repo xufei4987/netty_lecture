@@ -15,18 +15,26 @@ public class NewIoServer {
     public static void main(String[] args) throws Exception{
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
         ServerSocket socket = serverSocketChannel.socket();
+        socket.setReuseAddress(true);
         socket.bind(new InetSocketAddress(8899));
-        ByteBuffer readBuffer = ByteBuffer.allocate(10240);
-        SocketChannel socketChannel = serverSocketChannel.accept();
-        socketChannel.configureBlocking(true);
-        int readCount = 0;
-        while (readCount != -1){
-            try {
-                readCount = socketChannel.read(readBuffer);
-            }catch (Exception e){
-                e.printStackTrace();
+
+        ByteBuffer readBuffer = ByteBuffer.allocate(4096);
+
+        while (true){
+            SocketChannel socketChannel = serverSocketChannel.accept();
+            socketChannel.configureBlocking(false);
+
+            int readCount = 0;
+            while (-1 != readCount){
+                try {
+                    readCount = socketChannel.read(readBuffer);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    socketChannel.close();
+                    break;
+                }
+                readBuffer.rewind();
             }
-            readBuffer.clear();
         }
     }
 }

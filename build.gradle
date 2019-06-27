@@ -27,7 +27,7 @@ dependencies {
             "junit:junit:4.12"
     )
     compile (
-            "io.netty:netty-all:4.1.36.Final",
+            "io.netty:netty-all:4.1.15.Final",
             "com.google.protobuf:protobuf-java:${protobufVersion}",
             "com.google.protobuf:protobuf-java-util:${protobufVersion}",
             "io.grpc:grpc-protobuf:${grpcVersion}",
