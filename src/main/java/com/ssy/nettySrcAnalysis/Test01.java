@@ -39,6 +39,36 @@ import io.netty.util.internal.SystemPropertyUtil;
  *      5、Initiation dispatcher会出发事件处理器的回调方法，从而响应处于ready状态的handle，当事件发生时，Initiation dispatcher会将事件
  *      源激活的handle作为【key】来寻找并分发恰当的事件处理器回调方法。
  *      6、Initiation dispatcher会回调事件处理器的handle_events回调方法来执行特定于应用的功能，从而响应这个事件。
+ *
+ * EventLoopGroup的概念
+ *      1、一个EventLoopGroup当中包含一个或多个EventLoop
+ *      2、一个EventLoop在它的整个生命周期中只会与唯一的一个Thread进行绑定
+ *      3、所有有EventLoop所处理的各种I/O事件都将在与它关联的Thread上进行处理
+ *      4、一个channel在它的整个生命周期中只会注册在一个EventLoop上
+ *      5、一个EventLoop在运行过程中，会被分配给一个或者多个channel
+ *
+ * 重要的结论：在netty中，channel的实现一定是线程安全的，基于此，我们可以存储一个channel的引用，并且在需要向远程端点发送数据时，通过这个引用来调用
+ * channel的方法，即便当时有很多线程都在使用它也不会出现多线程问题，而且，消息一定是按顺序发送出去的。
+ *
+ * 注意：在我们的业务开发中，一定不要将耗时任务放在EventLoop的执行队列中，因为它会阻塞该线程所对应的所有channel上的其他执行任务，如果我们需要阻塞
+ * 调用或者是耗时操作，那么我们就需要使用一个专门的EventExecutor（业务线程池）。
+ *
+ * 业务线程池的两种实现方式：
+ * 1、在channelHandler的回调方法中，使用自己的业务线程池，这样就可以实现异步调用。
+ * 2、借助于Netty提供的向ChannelPipeline添加channelHandler时调用的addLast方法来传递EventExecutor。
+ * 说明：在默认情况下（调用addLast（handler）），channelHandler中的回调方法是有EventLoop中的线程所执行的，
+ * 如果调用addLast（EventExecutorGroup group， ChannelHandler... handlers）方法，那么channelHandler中的回调方法
+ * 就是由group参数所传递的线程组执行。
+ *
+ * JDK1.5的Future，netty的Future、ChannelFuture、ChannelPromise间的关系
+ * 1、JDK提供的Future只能进行手动查询结果，并且会阻塞。
+ * 2、Netty对FChannelFuture进行了增强，通过ChannelFutureListener以回调方法的形式来获取执行的结果
+ * 3、ChannelFutureListener的operationComplete方法是由EventLoop中的线程执行的，所以不要在这个方法里面执行耗时操作
+ *
+ * 在netty中有两种消息发送的方式，一种是可以直接写到channel中，另一种是写到与channelHandler所关联的channelHandlerContext中，
+ * 对于前一种方式来说，消息会从channelPipeLine的末尾开始流动，对于后一种方式来说，消息将会从channelPipeline的下一个handler
+ * 开始流动
+ *
  * @Author YouXu
  * @Date 2019/6/27 11:31
  *
