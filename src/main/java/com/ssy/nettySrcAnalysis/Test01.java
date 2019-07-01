@@ -69,6 +69,22 @@ import io.netty.util.internal.SystemPropertyUtil;
  * 对于前一种方式来说，消息会从channelPipeLine的末尾开始流动，对于后一种方式来说，消息将会从channelPipeline的下一个handler
  * 开始流动
  *
+ * Netty处理器的重要概念
+ * 1、netty的处理器分为入站处理器和出站处理器
+ * 2、入站处理器的顶层是ChannelInboundHandler，出站处理器的顶层是ChannelOutboundHandler
+ * 3、数据处理时常用的各种编解码器本质上都是处理器
+ * 4、编解码器：数据在网络中传输都是以字节流的形式呈现的，将数据原本的形式转换为字节流的形式称为编码（encode），将数据由字节流转换为其原本的形式
+ * 或其它格式称为解码（decode），编解码统一称为codec
+ * 5、编码：本质上是出站处理器，因此编码一定是一种channelOutboundHandler
+ * 6、解码：本质上是入站处理器，因此解码一定是一种channelInboundHandler
+ * 7、编码器通常以xxxEncoder命名，解码器通常以xxxDecoder命名
+ *
+ * TCP的粘包与拆包
+ *
+ * 关于netty编解码器的重要结论：
+ * 1、无论是编码器还是解码器，它所接收的消息类型必须与待处理的消息类型一致，否则该编码器或解码器并不会被执行
+ * 2、在解码器进行数据解码时，一定要记得判断缓冲（ByteBuf）中的数据是否足够，否则将会产生一些问题
+ *
  * @Author YouXu
  * @Date 2019/6/27 11:31
  *
