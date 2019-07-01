@@ -1,9 +1,7 @@
-package com.ssy.nettyHandler;
+package com.ssy.nettyHandler1;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-
-import java.time.LocalDateTime;
 
 public class MyClientHandler extends SimpleChannelInboundHandler<Long> {
     @Override

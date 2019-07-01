@@ -1,4 +1,5 @@
-package com.ssy.nettyHandler;
+package com.ssy.nettyHandler2;
+
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -8,11 +9,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-/**
- * @description TODO
- * @Author YouXu
- * @Date 2019/7/1 17:01
- **/
 public class MyServer {
     public static void main(String[] args) throws Exception{
         EventLoopGroup bossGrp = new NioEventLoopGroup();
@@ -32,5 +28,4 @@ public class MyServer {
             workerGrp.shutdownGracefully();
         }
     }
-
 }

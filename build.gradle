@@ -33,7 +33,9 @@ dependencies {
             "io.grpc:grpc-protobuf:${grpcVersion}",
             "io.grpc:grpc-stub:${grpcVersion}",
             "io.grpc:grpc-netty-shaded:${grpcVersion}",
-            "org.apache.thrift:libthrift:0.12.0"
+            "org.apache.thrift:libthrift:0.12.0",
+            "org.slf4j:slf4j-api:1.7.10",
+            "org.slf4j:slf4j-log4j12:1.7.10"
     )
     compileOnly "javax.annotation:javax.annotation-api:1.2"
 }
